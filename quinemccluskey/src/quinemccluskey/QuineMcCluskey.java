@@ -20,23 +20,25 @@ public class QuineMcCluskey {
 		combinaciones = obtenerAdyacencias(tabla);
 	    setAdyacencias(combinaciones);
 	    marcarCombinacionesRepetidas();
-	    eliminarCombinacionesRepetidas();
+	    adyacencias = eliminarCombinacionesRepetidas(adyacencias);
 	    mostrar(adyacencias);
 	    // mostrar(adyacencias);
 		
-	   
+		do{
 		    adyacencias = cantidadDeUnos(adyacencias);		//Combinaciones
 		    adyacencias = agruparPorNumeroDeUnos( adyacencias);
 		    //mostrar(adyacencias);
 		    combinaciones = obtenerAdyacencias(adyacencias);
-		    setAdyacencias(combinaciones);
-			//mostrar(adyacencias);
-			marcarCombinacionesRepetidas();
-			//mostrar(adyacencias);
-			eliminarCombinacionesRepetidas();
-			mostrar(adyacencias);
-
-	 
+		    if (numCombinaciones > 1){
+		    	setAdyacencias(combinaciones);
+		    	//mostrar(adyacencias);
+		    	marcarCombinacionesRepetidas();
+		    	mostrar(adyacencias);
+		    	adyacencias = eliminarCombinacionesRepetidas(adyacencias);
+		    	mostrar(adyacencias);
+		    }
+		    
+		}while(numCombinaciones >  0);	 
 
 		
 		System.out.println();
@@ -86,6 +88,9 @@ public class QuineMcCluskey {
 	
 	private static int[][] agruparPorNumeroDeUnos(int[][] tablaLocal){
 		int temporal[] = new int[columnas + 1];
+		
+		columnas = tablaLocal[0].length - 1;
+		filas = tablaLocal.length;
 		
 		for(int k = filas - 2; k >= 0; k--){
 			for (int i = 0; i < filas - 2; i++){
@@ -159,7 +164,7 @@ public class QuineMcCluskey {
 			}
 		}
 		
-		System.out.println("numero Minterminos: " + numCombinaciones);
+		System.out.println("numero Combinaciones: " + numCombinaciones);
 		return adyacencia;
 		
 		//
@@ -192,21 +197,27 @@ public class QuineMcCluskey {
 				}
 						
 				if (diferencias == 0){
-					adyacencias[filaSiguiente][columnas] = 5;
-					numeroDeMarcas++;
+					if(adyacencias[filaSiguiente][columnas] != 5) {
+						adyacencias[filaSiguiente][columnas] = 5;
+						numeroDeMarcas++;
+						//System.out.printf("%d ",numeroDeMarcas);
+					}
 				}
 			}
 		}
+		System.out.println("numero de marcas: "  + numeroDeMarcas);
 	}
 	
-	private static int [][] eliminarCombinacionesRepetidas(){
-		int[][] tablaLocal = adyacencias;
+	private static int [][] eliminarCombinacionesRepetidas(int[][] tablaLocal){
 		int i = 0;
+		
+		System.out.println(tablaLocal.length + " "+ numeroDeMarcas);
+		
 		adyacencias = new int[tablaLocal.length- numeroDeMarcas][tablaLocal[0].length];
 		for(int fil = 0 ; fil < tablaLocal.length; fil ++){
 				
 			if(!(tablaLocal[fil][tablaLocal[0].length - 1] == 5)){
-				//System.out.println("fil: " + fil + ", col: " + tablaLocal[0].length);
+				System.out.println("fil: " + fil + ", col: " + tablaLocal[0].length);
 				for(int col = 0; col < tablaLocal[0].length ; col++){
 					adyacencias[i][col] = tablaLocal[fil][col] ;
 				}
